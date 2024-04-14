@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: test
+  datasource:
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2b8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  servlet:
+    context-path: /
+
+email:
+  user: wangshulong
+  code: 123456
