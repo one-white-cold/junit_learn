@@ -8,14 +8,20 @@
 
 package com.heima.blog.sevice.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.blog.configproperties.EmailProperties;
 import com.heima.blog.entity.User;
 import com.heima.blog.mapper.UserMapper;
+import com.heima.blog.pojo.SearchBean;
 import com.heima.blog.sevice.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wang shu long
@@ -45,5 +51,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 添加
         userMapper.add(username, password);
+    }
+
+    public List<User> selectByCondition(SearchBean<User> searchBean) {
+        Page<User> page = new Page<>(searchBean.getPageNum(), searchBean.getPageSize());
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (Objects.nonNull(searchBean.getData()) && Objects.nonNull(searchBean.getData().getUsername())) {
+            queryWrapper.like("username", searchBean.getData().getUsername());
+        }
+        userMapper.selectPage(page, queryWrapper);
+        return page.getRecords();
     }
 }
